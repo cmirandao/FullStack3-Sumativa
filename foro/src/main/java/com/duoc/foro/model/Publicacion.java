@@ -37,7 +37,7 @@ public class Publicacion {
     private Long idUsuario;
 
     @NotNull(message = "Debe asociar una categoría a la publicación")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_CATEGORIA", nullable = false)
     private Categoria categoria;
 
