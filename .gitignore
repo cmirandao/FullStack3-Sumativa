@@ -1,0 +1,21 @@
+# --- IDEs y Editores ---
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# --- Maven / Compilación ---
+target/
+*.class
+*.log
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Spring Boot ---
+reloaded-classes/
+.sts4-cache/
