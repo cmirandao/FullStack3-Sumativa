@@ -5,6 +5,15 @@ Todas las modificaciones notables de este microservicio serán documentadas en e
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.1.0] - 2026-11-08
+
+### Agregado
+- Integración de Spring Security con `spring-security-test` para pruebas unitarias de controladores protegidos.
+- Control de acceso por anotaciones (`@PreAuthorize`) restringiendo la creación de categorías a administradores (`ADMIN`), y la moderación/eliminación de contenido a roles `ADMIN` y `MODERADOR`.
+
+### Cambios
+- Actualización de `ForoControllerTest` incorporando `@WithMockUser` para simular autoridades y validar códigos HTTP `403 Forbidden` ante accesos no autorizados.
+
 ## [1.0.0] - 2026-11-01
 
 ### Agregado

@@ -1,5 +1,7 @@
 package com.duoc.usuarios.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +29,7 @@ public class Usuario {
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, max = 100, message = "La contraseña debe tener al menos 6 caracteres")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 

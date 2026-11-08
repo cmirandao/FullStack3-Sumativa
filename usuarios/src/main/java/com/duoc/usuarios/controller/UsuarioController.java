@@ -7,6 +7,7 @@ import com.duoc.usuarios.service.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,23 +26,28 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // --- ROLES ---
+    // --- ROLES (Solo Administradores pueden gestionar roles) ---
     @GetMapping("/roles")
     public List<Rol> obtenerRoles() {
         return usuarioService.listarRoles();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/roles")
     public Rol crearRol(@Valid @RequestBody Rol rol) {
         return usuarioService.crearRol(rol);
     }
 
     // --- USUARIOS ---
+    
+    // Listar usuarios permitido para Administradores y Moderadores
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping
     public List<Usuario> obtenerUsuarios() {
         return usuarioService.listarUsuarios();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
         return usuarioService.obtenerPorId(id)
@@ -49,29 +55,34 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping("/rol/{idRol}")
     public List<Usuario> obtenerUsuariosPorRol(@PathVariable Long idRol) {
         return usuarioService.listarPorRol(idRol);
     }
 
+    // Registro abierto (o restringido a admin según prefieras, aquí abierto para nuevos registros)
     @PostMapping
     public Usuario crearUsuario(@Valid @RequestBody Usuario usuario) {
         return usuarioService.crearUsuario(usuario);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @Valid @RequestBody Usuario usuario) {
         Usuario actualizado = usuarioService.actualizarUsuario(id, usuario);
         return actualizado != null ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
     }
 
+    // Solo el ADMIN puede eliminar usuarios
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
 
-    // --- LOGIN ---
+    // --- LOGIN (Libre para autenticarse) ---
     @PostMapping("/login")
     public ResponseEntity<Object> iniciarSesion(@Valid @RequestBody LoginRequest request) {
         Optional<Usuario> usuarioOpt = usuarioService.login(request.getUsername(), request.getPassword());
