@@ -5,6 +5,15 @@ Todas las modificaciones notables de este microservicio serán documentadas en e
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.1.0] - 2026-11-08
+
+### Agregado
+- Implementación de Spring Security y control de acceso basado en roles (`ADMIN`, `USUARIO`).
+- Protección de credenciales sensibles ocultando el campo `password` en las respuestas GET mediante `@JsonProperty(Access.WRITE_ONLY)`.
+
+### Cambios
+- Actualización de la versión del SDK de compilación a Java 21 y ajuste del plugin de Maven para garantizar compatibilidad con Lombok.
+
 ## [1.0.0] - 2026-11-01
 
 ### Agregado

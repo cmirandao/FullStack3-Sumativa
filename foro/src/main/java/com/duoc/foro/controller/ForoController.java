@@ -6,6 +6,7 @@ import com.duoc.foro.model.Publicacion;
 import com.duoc.foro.service.ForoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ForoController {
         return foroService.listarCategorias();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/categorias")
     public Categoria crearCategoria(@Valid @RequestBody Categoria categoria) {
         return foroService.crearCategoria(categoria);
@@ -55,11 +57,13 @@ public class ForoController {
         return foroService.buscarPorTitulo(q);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USUARIO')")
     @PostMapping("/publicaciones")
     public Publicacion crearPublicacion(@Valid @RequestBody Publicacion publicacion) {
         return foroService.crearPublicacion(publicacion);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USUARIO')")
     @PutMapping("/publicaciones/{id}")
     public ResponseEntity<Publicacion> actualizarPublicacion(@PathVariable Long id, @Valid @RequestBody Publicacion publicacion) {
         Publicacion actualizada = foroService.actualizarPublicacion(id, publicacion);
@@ -67,12 +71,14 @@ public class ForoController {
     }
 
     // --- MODERAR PUBLICACIONES ---
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @PutMapping("/publicaciones/{id}/estado")
     public ResponseEntity<Publicacion> moderarPublicacion(@PathVariable Long id, @RequestParam String estado) {
         Publicacion moderada = foroService.cambiarEstadoPublicacion(id, estado);
         return moderada != null ? ResponseEntity.ok(moderada) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @DeleteMapping("/publicaciones/{id}")
     public ResponseEntity<Void> eliminarPublicacion(@PathVariable Long id) {
         foroService.eliminarPublicacion(id);
@@ -85,23 +91,27 @@ public class ForoController {
         return foroService.listarComentariosPorPublicacion(idPublicacion);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USUARIO')")
     @PostMapping("/comentarios")
     public Comentario crearComentario(@Valid @RequestBody Comentario comentario) {
         return foroService.crearComentario(comentario);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USUARIO')")
     @PutMapping("/comentarios/{id}")
     public ResponseEntity<Comentario> actualizarComentario(@PathVariable Long id, @Valid @RequestBody Comentario comentario) {
         Comentario actualizado = foroService.actualizarComentario(id, comentario);
         return actualizado != null ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @PutMapping("/comentarios/{id}/estado")
     public ResponseEntity<Comentario> moderarComentario(@PathVariable Long id, @RequestParam String estado) {
         Comentario moderado = foroService.cambiarEstadoComentario(id, estado);
         return moderado != null ? ResponseEntity.ok(moderado) : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @DeleteMapping("/comentarios/{id}")
     public ResponseEntity<Void> eliminarComentario(@PathVariable Long id) {
         foroService.eliminarComentario(id);

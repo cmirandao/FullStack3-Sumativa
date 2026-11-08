@@ -9,23 +9,24 @@ Repositorio oficial correspondiente a la entrega de la asignatura **Desarrollo F
 El sistema se divide en dos microservicios principales ejecutados de forma desacoplada:
 
 1. **`usuarios` (Puerto `8081`)**:
-   - Gestión de perfiles, roles y control de acceso.
-   - Manejo de autenticación y login (`LoginRequest`).
+   - Gestión de perfiles, roles y control de acceso por roles (`ADMIN`, `USUARIO`).
+   - Manejo de autenticación y protección de credenciales sensibles (`password` con acceso de solo escritura `@JsonProperty`).
    - Validaciones estrictas de payloads y manejo centralizado de excepciones con `@ControllerAdvice`.
 
 2. **`foro` (Puerto `8082`)**:
    - Administración de publicaciones, categorías y comentarios.
-   - Lógica de moderación e interacción de usuarios.
+   - Seguridad y moderación basada en roles (`ADMIN`, `MODERADOR`, `USUARIO`) utilizando restricciones con `@PreAuthorize`.
 
 ---
 
 ## Tecnologías y Stack Tecnológico
 
-* **Backend:** Java 21, Spring Boot 3.3.5
-* **Persistencia:** Spring Data JPA / Hibernate
-* **Base de Datos:** Oracle Cloud Autonomous Database (Conectada mediante Wallet de seguridad y controlador `ojdbc11`)
-* **Calidad y Pruebas:** JUnit 5, Mockito, MockMvc
-* **Control de Versiones y Documentación:** Git, Markdown, Changelogs independientes por microservicio
+- **Backend:** Java 21, Spring Boot 3.3.5
+- **Seguridad:** Spring Security (Control de acceso basado en roles y `@PreAuthorize`)
+- **Persistencia:** Spring Data JPA / Hibernate
+- **Base de Datos:** Oracle Cloud Autonomous Database (Conectada mediante Wallet de seguridad y controlador `ojdbc11`)
+- **Calidad y Pruebas:** JUnit 5, Mockito, MockMvc, Spring Security Test (`@WithMockUser`)
+- **Control de Versiones y Documentación:** Git, Markdown, Changelogs independientes por microservicio
 
 ---
 
