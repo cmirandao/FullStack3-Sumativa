@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -49,7 +50,7 @@ public class ForoServiceImpl implements ForoService {
     @Override
     public Optional<Publicacion> obtenerPublicacionPorId(Long id) {
         log.debug("Buscando publicación con ID: {}", id);
-        return publicacionRepository.findById(id);
+        return publicacionRepository.findById(Objects.requireNonNull(id, "id must not be null"));
     }
 
     @Override
@@ -72,8 +73,9 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public Publicacion actualizarPublicacion(Long id, Publicacion publicacion) {
-        return publicacionRepository.findById(id).map(existente -> {
-            log.info("Actualizando publicación ID: {}", id);
+        Long publicacionId = Objects.requireNonNull(id, "id must not be null");
+        return publicacionRepository.findById(publicacionId).map(existente -> {
+            log.info("Actualizando publicación ID: {}", publicacionId);
             existente.setTitulo(publicacion.getTitulo());
             existente.setContenido(publicacion.getContenido());
             existente.setEstado(publicacion.getEstado());
@@ -84,8 +86,9 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public Publicacion cambiarEstadoPublicacion(Long id, String nuevoEstado) {
-        return publicacionRepository.findById(id).map(existente -> {
-            log.warn("Moderación: Cambiando estado de publicación ID {} a {}", id, nuevoEstado);
+        Long publicacionId = Objects.requireNonNull(id, "id must not be null");
+        return publicacionRepository.findById(publicacionId).map(existente -> {
+            log.warn("Moderación: Cambiando estado de publicación ID {} a {}", publicacionId, nuevoEstado);
             existente.setEstado(nuevoEstado);
             return publicacionRepository.save(existente);
         }).orElse(null);
@@ -93,8 +96,9 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public void eliminarPublicacion(Long id) {
-        log.info("Eliminando publicación ID: {}", id);
-        publicacionRepository.deleteById(id);
+        Long publicacionId = Objects.requireNonNull(id, "id must not be null");
+        log.info("Eliminando publicación ID: {}", publicacionId);
+        publicacionRepository.deleteById(publicacionId);
     }
 
     @Override
@@ -111,7 +115,8 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public Comentario actualizarComentario(Long id, Comentario comentario) {
-        return comentarioRepository.findById(id).map(existente -> {
+        Long comentarioId = Objects.requireNonNull(id, "id must not be null");
+        return comentarioRepository.findById(comentarioId).map(existente -> {
             existente.setContenido(comentario.getContenido());
             existente.setEstado(comentario.getEstado());
             return comentarioRepository.save(existente);
@@ -120,8 +125,9 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public Comentario cambiarEstadoComentario(Long id, String nuevoEstado) {
-        return comentarioRepository.findById(id).map(existente -> {
-            log.warn("Moderación: Cambiando estado de comentario ID {} a {}", id, nuevoEstado);
+        Long comentarioId = Objects.requireNonNull(id, "id must not be null");
+        return comentarioRepository.findById(comentarioId).map(existente -> {
+            log.warn("Moderación: Cambiando estado de comentario ID {} a {}", comentarioId, nuevoEstado);
             existente.setEstado(nuevoEstado);
             return comentarioRepository.save(existente);
         }).orElse(null);
@@ -129,7 +135,8 @@ public class ForoServiceImpl implements ForoService {
 
     @Override
     public void eliminarComentario(Long id) {
-        log.info("Eliminando comentario ID: {}", id);
-        comentarioRepository.deleteById(id);
+        Long comentarioId = Objects.requireNonNull(id, "id must not be null");
+        log.info("Eliminando comentario ID: {}", comentarioId);
+        comentarioRepository.deleteById(comentarioId);
     }
 }

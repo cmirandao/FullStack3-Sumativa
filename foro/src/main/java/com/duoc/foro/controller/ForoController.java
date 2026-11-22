@@ -1,10 +1,13 @@
 package com.duoc.foro.controller;
 
+import com.duoc.foro.dto.ApiResponse;
 import com.duoc.foro.model.Categoria;
 import com.duoc.foro.model.Comentario;
 import com.duoc.foro.model.Publicacion;
 import com.duoc.foro.service.ForoService;
 import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -73,9 +76,23 @@ public class ForoController {
     // --- MODERAR PUBLICACIONES ---
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @PutMapping("/publicaciones/{id}/estado")
-    public ResponseEntity<Publicacion> moderarPublicacion(@PathVariable Long id, @RequestParam String estado) {
+    public ResponseEntity<ApiResponse<Publicacion>> moderarPublicacion(@PathVariable Long id, @RequestParam String estado) {
         Publicacion moderada = foroService.cambiarEstadoPublicacion(id, estado);
-        return moderada != null ? ResponseEntity.ok(moderada) : ResponseEntity.notFound().build();
+        if (moderada == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ApiResponse.Builder<Publicacion>()
+                    .exito(false)
+                    .mensaje("Publicación no encontrada")
+                    .build()
+            );
+        }
+        return ResponseEntity.ok(
+            new ApiResponse.Builder<Publicacion>()
+                .exito(true)
+                .mensaje("Estado de publicación actualizado a " + estado)
+                .datos(moderada)
+                .build()
+        );
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")

@@ -1,5 +1,6 @@
 package com.duoc.usuarios.controller;
 
+import com.duoc.usuarios.dto.ApiResponse;
 import com.duoc.usuarios.dto.LoginRequest;
 import com.duoc.usuarios.model.Rol;
 import com.duoc.usuarios.model.Usuario;
@@ -39,29 +40,46 @@ public class UsuarioController {
     }
 
     // --- USUARIOS ---
-    
+
     // Listar usuarios permitido para Administradores y Moderadores
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioService.listarUsuarios();
+    public ResponseEntity<ApiResponse<List<Usuario>>> obtenerUsuarios() {
+        List<Usuario> lista = usuarioService.listarUsuarios();
+        return ResponseEntity.ok(
+                new ApiResponse.Builder<List<Usuario>>()
+                        .exito(true)
+                        .mensaje("Listado de usuarios obtenido correctamente")
+                        .datos(lista)
+                        .build());
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Usuario>> obtenerUsuarioPorId(@PathVariable Long id) {
         return usuarioService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
+                .map(usuario -> ResponseEntity.ok(
+                    new ApiResponse.Builder<Usuario>()
+                        .exito(true)
+                        .mensaje("Usuario obtenido correctamente")
+                        .datos(usuario)
+                        .build()
+                ))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MODERADOR')")
     @GetMapping("/rol/{idRol}")
-    public List<Usuario> obtenerUsuariosPorRol(@PathVariable Long idRol) {
-        return usuarioService.listarPorRol(idRol);
+    public ResponseEntity<ApiResponse<List<Usuario>>> obtenerUsuariosPorRol(@PathVariable Long idRol) {
+        List<Usuario> lista = usuarioService.listarPorRol(idRol);
+        return ResponseEntity.ok(
+                new ApiResponse.Builder<List<Usuario>>()
+                        .exito(true)
+                        .mensaje("Usuarios por rol obtenidos correctamente")
+                        .datos(lista)
+                        .build());
     }
 
-    // Registro abierto (o restringido a admin según prefieras, aquí abierto para nuevos registros)
     @PostMapping
     public Usuario crearUsuario(@Valid @RequestBody Usuario usuario) {
         return usuarioService.crearUsuario(usuario);
@@ -84,20 +102,31 @@ public class UsuarioController {
 
     // --- LOGIN (Libre para autenticarse) ---
     @PostMapping("/login")
-    public ResponseEntity<Object> iniciarSesion(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<Object>> iniciarSesion(@Valid @RequestBody LoginRequest request) {
         Optional<Usuario> usuarioOpt = usuarioService.login(request.getUsername(), request.getPassword());
+
         if (usuarioOpt.isPresent()) {
             Usuario u = usuarioOpt.get();
-            Map<String, Object> respuesta = new HashMap<>();
-            respuesta.put("mensaje", "Inicio de sesión exitoso");
-            respuesta.put("idUsuario", u.getIdUsuario());
-            respuesta.put("username", u.getUsername());
-            respuesta.put("email", u.getEmail());
-            respuesta.put("rol", u.getRol().getNombre());
+            Map<String, Object> datosUsuario = new HashMap<>();
+            datosUsuario.put("idUsuario", u.getIdUsuario());
+            datosUsuario.put("username", u.getUsername());
+            datosUsuario.put("email", u.getEmail());
+            datosUsuario.put("rol", u.getRol().getNombre());
+
+            ApiResponse<Object> respuesta = new ApiResponse.Builder<Object>()
+                    .exito(true)
+                    .mensaje("Inicio de sesión exitoso")
+                    .datos(datosUsuario)
+                    .build();
+
             return ResponseEntity.ok(respuesta);
         } else {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Credenciales inválidas o usuario inactivo");
+            ApiResponse<Object> error = new ApiResponse.Builder<Object>()
+                    .exito(false)
+                    .mensaje("Credenciales inválidas o usuario inactivo")
+                    .datos(null)
+                    .build();
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }

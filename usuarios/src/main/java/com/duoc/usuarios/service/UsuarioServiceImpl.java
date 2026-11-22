@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -44,7 +45,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Optional<Usuario> obtenerPorId(Long id) {
         log.debug("Buscando usuario con ID: {}", id);
-        return usuarioRepository.findById(id);
+        return usuarioRepository.findById(Objects.requireNonNull(id, "id must not be null"));
     }
 
     @Override
@@ -61,8 +62,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario actualizarUsuario(Long id, Usuario usuario) {
-        return usuarioRepository.findById(id).map(existente -> {
-            log.info("Actualizando datos del usuario ID: {}", id);
+        Long usuarioId = Objects.requireNonNull(id, "id must not be null");
+        return usuarioRepository.findById(usuarioId).map(existente -> {
+            log.info("Actualizando datos del usuario ID: {}", usuarioId);
             existente.setUsername(usuario.getUsername());
             existente.setEmail(usuario.getEmail());
             existente.setPassword(usuario.getPassword());
@@ -74,8 +76,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void eliminarUsuario(Long id) {
-        log.warn("Eliminando usuario ID: {}", id);
-        usuarioRepository.deleteById(id);
+        Long usuarioId = Objects.requireNonNull(id, "id must not be null");
+        log.warn("Eliminando usuario ID: {}", usuarioId);
+        usuarioRepository.deleteById(usuarioId);
     }
 
     @Override

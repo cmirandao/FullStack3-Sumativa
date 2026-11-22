@@ -1,5 +1,6 @@
 package com.duoc.foro.controller;
 
+import com.duoc.foro.config.SecurityConfig;
 import com.duoc.foro.model.Categoria;
 import com.duoc.foro.service.ForoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,11 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -21,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ForoController.class)
+@Import(SecurityConfig.class)
 public class ForoControllerTest {
 
     @Autowired
@@ -42,7 +46,7 @@ public class ForoControllerTest {
         given(foroService.listarCategorias()).willReturn(Arrays.asList(cat1));
 
         mockMvc.perform(get("/api/foro/categorias")
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nombre").value("Arquitectura y Microservicios"));
     }
@@ -58,8 +62,8 @@ public class ForoControllerTest {
         given(foroService.crearCategoria(any(Categoria.class))).willReturn(cat);
 
         mockMvc.perform(post("/api/foro/categorias")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cat)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(cat))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("DevOps"));
     }
@@ -69,10 +73,11 @@ public class ForoControllerTest {
     public void testCrearCategoriaSinPermisoDenegado() throws Exception {
         Categoria cat = new Categoria();
         cat.setNombre("DevOps");
+        cat.setDescripcion("CI/CD y Contenedores");
 
         mockMvc.perform(post("/api/foro/categorias")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cat)))
+                .contentType(Objects.requireNonNull(MediaType.APPLICATION_JSON))
+                .content(Objects.requireNonNull(objectMapper.writeValueAsString(cat))))
                 .andExpect(status().isForbidden());
     }
 }
