@@ -1,0 +1,63 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+      <div class="card-dark p-4 p-md-5 shadow-sm">
+        <div class="text-center mb-4">
+          <i class="bi bi-shield-lock fs-2 text-primary"></i>
+          <h2 class="h4 mt-2 mb-1">Iniciar sesión</h2>
+          <p class="text-muted-soft small mb-0">Accede a tu cuenta del foro</p>
+        </div>
+
+        @if (mensajeError) {
+          <div class="alert alert-danger py-2 small" role="alert">
+            {{ mensajeError }}
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <div class="mb-3">
+            <label class="form-label small">Usuario o correo electrónico</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="identificador"
+              placeholder="Ej: username o username@duoc.cl"
+            />
+            @if (form.controls.identificador.touched && form.controls.identificador.invalid) {
+              <div class="text-danger small mt-1">Ingresa tu usuario o correo (mín. 3 caracteres).</div>
+            }
+          </div>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label small mb-0">Contraseña</label>
+              <a routerLink="/recuperar" class="small">¿Olvidaste tu contraseña?</a>
+            </div>
+            <input
+              type="password"
+              class="form-control"
+              formControlName="password"
+              placeholder="••••••••"
+            />
+            @if (form.controls.password.touched && form.controls.password.invalid) {
+              <div class="text-danger small mt-1">La contraseña es obligatoria.</div>
+            }
+          </div>
+
+          <button type="submit" class="btn btn-accent w-100 py-2">
+            Ingresar
+          </button>
+        </form>
+
+        <hr class="border-secondary my-4 opacity-25" />
+
+        <p class="text-center text-muted-soft small mb-2">
+          ¿No tienes cuenta? <a routerLink="/registro">Regístrate aquí</a>
+        </p>
+        <div class="text-muted-soft small text-center">
+          Prueba rápida: <code>cmiranda_admin</code> / <code>victoria_mod</code> / <code>sofia_dev</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

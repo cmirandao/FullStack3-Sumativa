@@ -1,0 +1,77 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <div class="card-dark p-4 p-md-5 shadow-sm">
+        <div class="text-center mb-4">
+          <i class="bi bi-person-plus fs-2 text-primary"></i>
+          <h2 class="h4 mt-2 mb-1">Crear cuenta</h2>
+          <p class="text-muted-soft small mb-0">Completa tus datos para participar en el foro</p>
+        </div>
+
+        @if (mensajeEstado) {
+          <div class="alert py-2 small" [class.alert-danger]="esError" [class.alert-success]="!esError">
+            {{ mensajeEstado }}
+          </div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label small">Nombre completo</label>
+              <input type="text" class="form-control" formControlName="nombreCompleto" placeholder="Nombre y apellido" />
+              @if (form.controls.nombreCompleto.touched && form.controls.nombreCompleto.invalid) {
+                <div class="text-danger small mt-1">Mínimo 3 caracteres.</div>
+              }
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label small">Nombre de usuario</label>
+              <input type="text" class="form-control" formControlName="username" placeholder="ej: usuario_foro" />
+              @if (form.controls.username.touched && form.controls.username.invalid) {
+                <div class="text-danger small mt-1">4 a 25 chars (letras, números o _).</div>
+              }
+            </div>
+
+            <div class="col-12 col-md-7">
+              <label class="form-label small">Correo electrónico</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="correo@ejemplo.com" />
+              @if (form.controls.email.touched && form.controls.email.invalid) {
+                <div class="text-danger small mt-1">Ingresa un correo válido.</div>
+              }
+            </div>
+
+            <div class="col-12 col-md-5">
+              <label class="form-label small">Rol inicial</label>
+              <select class="form-select" formControlName="rol">
+                <option value="USUARIO">USUARIO</option>
+                <option value="MODERADOR">MODERADOR</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small">Contraseña</label>
+              <input type="password" class="form-control" formControlName="password" placeholder="Ej: ClaveSegura1*" />
+              @if (pw.touched && pw.invalid) {
+                <ul class="list-unstyled text-danger small mt-2 mb-0">
+                  @if (pw.errors?.['minlength']) { <li>• Mínimo 8 caracteres.</li> }
+                  @if (pw.errors?.['maxlength']) { <li>• Máximo 24 caracteres.</li> }
+                  @if (pw.errors?.['letraNumero']) { <li>• Debe incluir letras y números.</li> }
+                  @if (pw.errors?.['caracterEspecial']) { <li>• Debe incluir al menos un carácter especial (ej. *, !, @, #).</li> }
+                </ul>
+              }
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-accent w-100 py-2 mt-4">
+            Registrarme
+          </button>
+        </form>
+
+        <p class="text-center text-muted-soft small mt-4 mb-0">
+          ¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

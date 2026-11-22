@@ -1,0 +1,73 @@
+<div class="container py-4">
+  <div class="mb-4">
+    <h1 class="h3 mb-1">Panel de Moderación</h1>
+    <p class="text-muted-soft small mb-0">
+      Revisa y gestiona el estado (ACTIVO / BANEADO) de publicaciones y comentarios.
+    </p>
+  </div>
+
+  @for (pub of publicaciones; track pub.idPublicacion) {
+    <div class="card-dark p-4 mb-3">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-8">
+          <div class="d-flex flex-wrap gap-2 mb-1">
+            <span class="badge badge-cat">{{ nombreCategoria(pub.idCategoria) }}</span>
+            <span
+              class="badge"
+              [class.bg-danger]="pub.estado === 'BANEADO'"
+              [class.bg-success]="pub.estado === 'ACTIVO'"
+            >
+              {{ pub.estado }}
+            </span>
+          </div>
+          <h2 class="h6 mb-1">{{ pub.titulo }}</h2>
+          <div class="small text-muted-soft">
+            Autor: {{ pub.autor }} · {{ pub.fechaCreacion }}
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4 text-md-end">
+          <button
+            type="button"
+            class="btn btn-sm"
+            [class.btn-danger]="pub.estado === 'ACTIVO'"
+            [class.btn-success]="pub.estado === 'BANEADO'"
+            (click)="toggleBanPublicacion(pub.idPublicacion)"
+          >
+            <i class="bi {{ pub.estado === 'ACTIVO' ? 'bi-slash-circle' : 'bi-check-circle' }} me-1"></i>
+            {{ pub.estado === 'ACTIVO' ? 'Banear publicación' : 'Restaurar publicación' }}
+          </button>
+        </div>
+      </div>
+
+      @if (pub.comentarios.length > 0) {
+        <div class="mt-3 pt-3 border-top border-secondary border-opacity-25">
+          <div class="small text-muted-soft mb-2">Comentarios del tema:</div>
+          @for (com of pub.comentarios; track com.idComentario) {
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 py-2 px-3 rounded mb-2" style="background-color: #161922;">
+              <div class="small">
+                <strong>{{ com.autor }}</strong>: {{ com.contenido }}
+                <span
+                  class="badge ms-2"
+                  [class.bg-danger]="com.estado === 'BANEADO'"
+                  [class.bg-success]="com.estado === 'ACTIVO'"
+                >
+                  {{ com.estado }}
+                </span>
+              </div>
+              <button
+                type="button"
+                class="btn btn-sm"
+                [class.btn-outline-danger]="com.estado === 'ACTIVO'"
+                [class.btn-outline-success]="com.estado === 'BANEADO'"
+                (click)="toggleBanComentario(pub.idPublicacion, com.idComentario)"
+              >
+                {{ com.estado === 'ACTIVO' ? 'Banear' : 'Restaurar' }}
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

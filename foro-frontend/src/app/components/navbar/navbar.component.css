@@ -1,0 +1,33 @@
+.nav-sobrio {
+  background-color: #191d29;
+  border-bottom: 1px solid #2d3347;
+}
+
+.brand-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(91, 141, 239, 0.25), rgba(124, 109, 240, 0.28));
+  border: 1px solid rgba(124, 109, 240, 0.45);
+  color: #b4a9ff;
+}
+
+.nav-link {
+  color: #94a3b8;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem !important;
+}
+
+.nav-link:hover {
+  color: #e2e8f0;
+  background-color: rgba(124, 109, 240, 0.1);
+}
+
+.nav-link.active {
+  color: #f8fafc !important;
+  background-color: rgba(124, 109, 240, 0.22);
+  border: 1px solid rgba(124, 109, 240, 0.35);
+}

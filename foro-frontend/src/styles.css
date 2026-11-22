@@ -1,0 +1,102 @@
+:root {
+  --bg-main: #161922;
+  --bg-surface: #1e222f;
+  --bg-surface-hover: #252a3a;
+  --bg-input: #13161f;
+  --border-subtle: #2d3347;
+
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+
+  --accent-blue: #5b8def;
+  --accent-purple: #7c6df0;
+  --accent-purple-hover: #6b5ce0;
+  --accent-danger: #d9536f;
+  --accent-success: #4ea885;
+  --accent-warning: #d4a054;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* Tarjetas y superficies */
+.card-dark {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  color: var(--text-main);
+}
+
+/* Inputs y selects sin fondo blanco */
+.form-control,
+.form-select {
+  background-color: var(--bg-input) !important;
+  border: 1px solid var(--border-subtle) !important;
+  color: var(--text-main) !important;
+  border-radius: 8px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-purple) !important;
+  box-shadow: 0 0 0 0.2rem rgba(124, 109, 240, 0.2) !important;
+}
+
+.form-control::placeholder {
+  color: #64748b !important;
+}
+
+/* Botones */
+.btn-accent {
+  background-color: var(--accent-purple);
+  border-color: var(--accent-purple);
+  color: #f8fafc;
+  font-weight: 500;
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-purple-hover);
+  border-color: var(--accent-purple-hover);
+  color: #ffffff;
+}
+
+.btn-outline-accent {
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  background: transparent;
+}
+
+.btn-outline-accent:hover {
+  background-color: rgba(91, 141, 239, 0.15);
+  color: #93b4f5;
+}
+
+/* Badges de roles y estados */
+.badge-rol {
+  background-color: rgba(124, 109, 240, 0.18);
+  color: #b4a9ff;
+  border: 1px solid rgba(124, 109, 240, 0.35);
+}
+
+.badge-cat {
+  background-color: rgba(91, 141, 239, 0.15);
+  color: #93b4f5;
+  border: 1px solid rgba(91, 141, 239, 0.3);
+}
+
+.text-muted-soft {
+  color: var(--text-muted) !important;
+}
+
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #8ab0f7;
+}
