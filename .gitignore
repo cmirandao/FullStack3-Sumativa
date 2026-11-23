@@ -5,10 +5,22 @@
 *.sublime-project
 *.sublime-workspace
 
-# --- Maven / Compilación ---
+# --- Maven / Compilación / Node ---
 target/
+node_modules/
+dist/
+.angular/
 *.class
 *.log
+*.tar
+*.zip
+
+# --- Wallets / Credenciales locales ---
+Wallet_DBSumativa/
+*.p12
+*.sso
+*.jks
+*.keystore
 
 # --- Sistema operativo ---
 .DS_Store

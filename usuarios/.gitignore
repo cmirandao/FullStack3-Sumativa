@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Oracle Wallet y archivos pesados ###
+Wallet_DBSumativa/
+*.p12
+*.sso
+*.jks
+*.keystore
+*.tar
+*.zip
