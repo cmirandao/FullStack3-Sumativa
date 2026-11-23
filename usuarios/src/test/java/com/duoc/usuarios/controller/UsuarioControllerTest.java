@@ -4,6 +4,7 @@ import com.duoc.usuarios.config.SecurityConfig;
 import com.duoc.usuarios.dto.LoginRequest;
 import com.duoc.usuarios.model.Rol;
 import com.duoc.usuarios.model.Usuario;
+import com.duoc.usuarios.repository.UsuarioRepository;
 import com.duoc.usuarios.service.UsuarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class UsuarioControllerTest {
 
     @MockBean
     private UsuarioService usuarioService;
+
+    @MockBean
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private ObjectMapper objectMapper;

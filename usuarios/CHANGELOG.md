@@ -5,6 +5,20 @@ Todas las modificaciones notables de este microservicio serán documentadas en e
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+---
+
+## [1.2.0] - 2026-11-22
+
+### Agregado
+- Respuestas estandarizadas en `UsuarioController` mediante `ApiResponse.Builder<T>` (incluyendo el flujo de `/login`).
+- Configuración de `SecurityConfig` con `httpBasic`, `UserDetailsService` vinculado a `UsuarioRepository` y codificador de contraseñas para las pruebas de autenticación.
+- `Dockerfile` basado en `eclipse-temurin:21-jdk-jammy` empaquetando el `.jar` compilado y `Wallet_DBSumativa` en el puerto `8081`.
+
+### Correcciones
+- Corrección de cierres de genéricos (`<...>`) en `iniciarSesion` y `obtenerUsuarioPorId` dentro de `UsuarioController`.
+
+---
+
 ## [1.1.0] - 2026-11-08
 
 ### Agregado
@@ -13,6 +27,8 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ### Cambios
 - Actualización de la versión del SDK de compilación a Java 21 y ajuste del plugin de Maven para garantizar compatibilidad con Lombok.
+
+---
 
 ## [1.0.0] - 2026-11-01
 

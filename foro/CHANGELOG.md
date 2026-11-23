@@ -5,6 +5,20 @@ Todas las modificaciones notables de este microservicio serán documentadas en e
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+---
+
+## [1.2.0] - 2026-11-22
+
+### Agregado
+- Estandarización de respuestas REST mediante el patrón Builder (`ApiResponse.Builder<T>`).
+- Soporte de autenticación HTTP Basic en `SecurityConfig` (`httpBasic` y `UserDetailsService`) para validar roles en endpoints protegidos con `@PreAuthorize`.
+- `Dockerfile` basado en `eclipse-temurin:21-jdk-jammy` empaquetando el `.jar` compilado y `Wallet_DBSumativa` en el puerto `8082`.
+
+### Correcciones
+- Ajuste de genéricos parametrizados en `ResponseEntity<ApiResponse<...>>` para evitar errores de compilación y tipos crudos.
+
+---
+
 ## [1.1.0] - 2026-11-08
 
 ### Agregado
@@ -13,6 +27,8 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ### Cambios
 - Actualización de `ForoControllerTest` incorporando `@WithMockUser` para simular autoridades y validar códigos HTTP `403 Forbidden` ante accesos no autorizados.
+
+---
 
 ## [1.0.0] - 2026-11-01
 
